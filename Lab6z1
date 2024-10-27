@@ -1,0 +1,205 @@
+using System;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        IContinentalFactory factory1 = new AfricanFactory();
+        Client client1 = new Client(factory1);
+        client1.Run();
+        
+        IContinentalFactory factory2 = new AsiaticFactory();
+        Client client2 = new Client(factory2);
+        client2.Run();
+    }
+
+    interface IElephant
+    {
+        int GetWeight();
+        int GetHeight();
+        string GetHabitat();
+        string GetScientificName();
+        string GetDiet();
+    }
+
+    interface ILion
+    {
+        string GetFeatures();
+        void CanMeet(IElephant elephant);
+        string GetHabitat();
+        string GetScientificName();
+        string GetDiet();
+    }
+
+    class AfricanElephant : IElephant
+    {
+        public int GetWeight()
+        {
+            return 7500;
+        }
+
+        public int GetHeight()
+        {
+            return 4;
+        }
+
+        public string GetHabitat()
+        {
+            return "Savannas, forests, and woodlands of Africa";
+        }
+
+        public string GetScientificName()
+        {
+            return "Loxodonta africana";
+        }
+
+        public string GetDiet()
+        {
+            return "Herbivore, mainly grass, fruits, and bark";
+        }
+    }
+
+    class IndianElephant : IElephant
+    {
+        public int GetWeight()
+        {
+            return 6000;
+        }
+
+        public int GetHeight()
+        {
+            return 3;
+        }
+
+        public string GetHabitat()
+        {
+            return "Forests and grasslands of India and Southeast Asia";
+        }
+
+        public string GetScientificName()
+        {
+            return "Elephas maximus indicus";
+        }
+
+        public string GetDiet()
+        {
+            return "Herbivore, mainly grass, fruits, and bark";
+        }
+    }
+
+    class AfricanLion : ILion
+    {
+        public string GetFeatures()
+        {
+            return "has a big mane";
+        }
+
+        public void CanMeet(IElephant elephant)
+        {
+            Console.WriteLine(this.GetType().Name + " Can meet " + elephant.GetType().Name);
+        }
+
+        public string GetHabitat()
+        {
+            return "Savannas and grasslands of Africa";
+        }
+
+        public string GetScientificName()
+        {
+            return "Panthera leo";
+        }
+
+        public string GetDiet()
+        {
+            return "Carnivore, mainly hunting large ungulates";
+        }
+    }
+
+    class AsiaticLion : ILion
+    {
+        public string GetFeatures()
+        {
+            return "has a small mane";
+        }
+
+        public void CanMeet(IElephant elephant)
+        {
+            Console.WriteLine(this.GetType().Name + " Can meet " + elephant.GetType().Name);
+        }
+
+        public string GetHabitat()
+        {
+            return "Forests and scrublands of India";
+        }
+
+        public string GetScientificName()
+        {
+            return "Panthera leo persica";
+        }
+
+        public string GetDiet()
+        {
+            return "Carnivore, mainly hunting ungulates and small animals";
+        }
+    }
+
+    interface IContinentalFactory
+    {
+        ILion CreateLion();
+        IElephant CreateElephant();
+    }
+
+    class AfricanFactory : IContinentalFactory
+    {
+        public ILion CreateLion()
+        {
+            return new AfricanLion();
+        }
+
+        public IElephant CreateElephant()
+        {
+            return new AfricanElephant();
+        }
+    }
+
+    class AsiaticFactory : IContinentalFactory
+    {
+        public ILion CreateLion()
+        {
+            return new AsiaticLion();
+        }
+
+        public IElephant CreateElephant()
+        {
+            return new IndianElephant();
+        }
+    }
+
+    class Client
+    {
+        private ILion lion;
+        private IElephant elephant;
+
+        public Client(IContinentalFactory factory)
+        {
+            lion = factory.CreateLion();
+            elephant = factory.CreateElephant();
+        }
+
+        public void Run()
+        {
+            Console.WriteLine(elephant.GetType().Name + " weighs " + elephant.GetWeight() + "kg");
+            Console.WriteLine(elephant.GetType().Name + " is tall " + elephant.GetHeight() + "m");
+            Console.WriteLine(elephant.GetType().Name + " habitat: " + elephant.GetHabitat());
+            Console.WriteLine(elephant.GetType().Name + " scientific name: " + elephant.GetScientificName());
+            Console.WriteLine(elephant.GetType().Name + " diet: " + elephant.GetDiet());
+
+            Console.WriteLine(lion.GetType().Name + " " + lion.GetFeatures());
+            Console.WriteLine(lion.GetType().Name + " habitat: " + lion.GetHabitat());
+            Console.WriteLine(lion.GetType().Name + " scientific name: " + lion.GetScientificName());
+            Console.WriteLine(lion.GetType().Name + " diet: " + lion.GetDiet());
+            
+            lion.CanMeet(elephant);
+        }
+    }
+}
